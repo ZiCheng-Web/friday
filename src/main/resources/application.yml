@@ -4,6 +4,9 @@ server:
 spring:
   profiles:
     active: dev
+  devtools:
+    restart:
+      additional-paths: resources/**,static/**,templates/**
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
