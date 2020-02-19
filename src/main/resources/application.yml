@@ -1,3 +1,6 @@
+server:
+  port: 8080
+
 spring:
   profiles:
     active: dev
@@ -28,3 +31,6 @@ mybatis:
   mapper-locations: classpath:/mybatis-mappers/*
   configuration:
     mapUnderscoreToCamelCase: true
+
+#baseInfo
+api-url: /api
