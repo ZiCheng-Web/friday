@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
@@ -89,5 +91,14 @@ public class UserServiceImpl implements UserService {
     public Results<SysUser> getUserByFuzzyUsername(String username, Integer offset, Integer limit) {
 	    return Results.success(userDao.getUserByFuzzyUsername(username).intValue(), userDao.getUserByFuzzyUsernameByPage(username, offset, limit));
     }
+	//批量删除
+	@Override
+	public int deleteUsers(List delList) {
+		//sysroleuser
+		roleUserDao.deleteRoleUserByUsersId(delList);
+		//sysuser
+
+		return userDao.deleteUsers(delList);
+	}
 
 }

@@ -33,7 +33,7 @@
                         <!--</div>-->
 
                         <div class="layui-card-header">
-                            <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
+                            <button class="layui-btn layui-btn-danger delAll_btn" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
                             <button class="layui-btn" onclick="xadmin.open('添加用户','/user/add')"><i class="layui-icon"></i>添加</button>
                             <!--使用用户名搜索-->
                             &nbsp;&nbsp;
@@ -86,22 +86,45 @@
                     ]
                 ]
             });
+            //批量删除
+            $(".delAll_btn").click(function(){
+                var checkStatus = table.checkStatus('table'),
+                data = checkStatus.data,
+                    usersId = "";
+                if(data.length > 0) {
+                    for (var i in data) {
+                        usersId+=data[i].id+",";
+                    }
+                    console.log(usersId);
+                    layer.confirm('确定删除选中的数据？', {icon: 3, title: '提示信息'}, function (index) {
+                        $.post('/user/delAll/'+usersId,function(data){
+                            layer.msg(data.msg);
+                            layer.close(index);
+                            //xadmin.father_reload();
+                            table.reload('table');
+                        });
+                    })
+                }else{
+                    layer.msg("请选择需要删除的数据");
+                }
+            })
+
 
             //监听工具条
             table.on('tool(member)', function(obj){
                 var data = obj.data;
                 if(obj.event === 'del'){
-                    layer.confirm('真的删除行么', function(index){
+                    layer.confirm('真的删除行吗？', function(index){
                         $.ajax({
                             url:"/user/delete",
                             type:"GET",
                             data:{id:data.id},
                             dataType:'json',
                             success:function(result){
-                                layer.alert("删除成功", {icon: 1},function (index1) {
+                                layer.alert("删除成功！", {icon: 1},function (index1) {
                                     layer.close(index1);
-                                    xadmin.father_reload();
-                                    //table.reload('table');
+                                    //xadmin.father_reload();
+                                    table.reload('table');
                                 });
                             },
                         });

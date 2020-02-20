@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 @Mapper
 public interface RoleUserDao {
 
@@ -19,4 +21,6 @@ public interface RoleUserDao {
 
     @Delete("delete from sys_role_user where userId = #{userId}")
     int deleteRoleUserByUserId(int userId);
+
+    int deleteRoleUserByUsersId(List delList);
 }

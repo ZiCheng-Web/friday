@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 @Controller
@@ -53,7 +55,7 @@ public class UserController {
     @ResponseBody
     public Results<SysUser> saveUser(UserDto userDto, Integer roleId) {
         SysUser sysUser = null ;
-
+//        查询电话号码是否存在
         sysUser = userService.getUserByPhone(userDto.getTelephone());
         if(sysUser != null && !(sysUser.getId().equals(userDto.getId()))){
             return Results.failure(ResponseCode.PHONE_REPEAT.getCode(), ResponseCode.PHONE_REPEAT.getMessage());
@@ -64,6 +66,9 @@ public class UserController {
         return userService.save(userDto, roleId);
     }
 
+    /**
+     * 日期转换方法
+     */
     String pattern = "yyyy-MM-dd";
 	@InitBinder
     public void initBinder(WebDataBinder binder, WebRequest request){
@@ -88,7 +93,7 @@ public class UserController {
 
         return userService.updateUser(userDto, roleId);
     }
-
+    //单个删除
     @GetMapping("/delete")
     @ResponseBody
     public Results deleteUser(UserDto userDto) {
@@ -99,6 +104,25 @@ public class UserController {
             return Results.failure();
         }
     }
+    //批量删除
+    @PostMapping("/delAll/{usersId}")
+    @ResponseBody
+    public Results delAll(@PathVariable("usersId") String usersId) {
+        List delList = new ArrayList();
+        String[] strs = usersId.split(",");
+        for (String str : strs) {
+            delList.add(str);
+        }
+        int count = userService.deleteUsers(delList);
+        if(count > 0){
+            return Results.success();
+        }else{
+            return Results.failure();
+        }
+    }
+
+
+
 
     @GetMapping("/findUserByFuzzyUsername")
     @ResponseBody

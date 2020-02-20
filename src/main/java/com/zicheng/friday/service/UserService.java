@@ -3,6 +3,8 @@ import com.zicheng.friday.base.result.Results;
 import com.zicheng.friday.dto.UserDto;
 import com.zicheng.friday.model.SysUser;
 
+import java.util.List;
+
 public interface UserService {
 	SysUser getUser(String username);
 
@@ -19,4 +21,6 @@ public interface UserService {
     int deleteUser(Long id);
 
     Results<SysUser> getUserByFuzzyUsername(String username, Integer offset, Integer limit);
+
+    int deleteUsers(List delList);
 }
