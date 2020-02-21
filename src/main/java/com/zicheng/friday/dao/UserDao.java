@@ -38,6 +38,6 @@ public interface UserDao {
 
     @Select("select * from sys_user t where t.username like '%${username}%' limit #{startPosition} , #{limit}")
     List<SysUser> getUserByFuzzyUsernameByPage(@Param("username") String username, @Param("startPosition") Integer startPosition, @Param("limit") Integer limit);
-
+	//批量删除
 	int deleteUsers(List delList);
 }

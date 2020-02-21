@@ -97,7 +97,6 @@ public class UserServiceImpl implements UserService {
 		//sysroleuser
 		roleUserDao.deleteRoleUserByUsersId(delList);
 		//sysuser
-
 		return userDao.deleteUsers(delList);
 	}
 

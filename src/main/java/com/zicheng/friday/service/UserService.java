@@ -21,6 +21,6 @@ public interface UserService {
     int deleteUser(Long id);
 
     Results<SysUser> getUserByFuzzyUsername(String username, Integer offset, Integer limit);
-
+    //批量删除
     int deleteUsers(List delList);
 }
