@@ -27,6 +27,7 @@ public class PermissionServiceImpl implements PermissionService {
         List datas = permissionDao.findAll();
         JSONArray array = new JSONArray();
         log.info(getClass().getName() + ".setPermissionsTree(?,?,?)");
+        //设置了默认的pid是0
         TreeUtils.setPermissionsTree(0, datas, array);
         return Results.success(array);
     }

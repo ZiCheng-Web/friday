@@ -14,6 +14,7 @@ public class TreeUtils {
      * @param permissionsAll
      * @param array
      */
+    // 递归调用方法
     public static void setPermissionsTree(Integer parentId, List<SysPermission> permissionsAll, JSONArray array) {
         for (SysPermission per : permissionsAll) {
             if (per.getParentId().equals(parentId)) {

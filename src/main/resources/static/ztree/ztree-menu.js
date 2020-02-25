@@ -31,10 +31,10 @@ function onlyGetMenuTree() {
 function getMenuTree() {
 	var root = {
 		id : 0,
-		name : "root",
-		open : true,
+		name : "root",//根节点的名字是root
+		open : true,//默认是打开的
 	};
-
+	//异步请求
 	$.ajax({
 		type : 'get',
 		url : '/permission/listAllPermission',
@@ -174,6 +174,7 @@ function initParentMenuSelect(){
 
 function getSettting(isRadioType){
 	var setting = {
+		//启动CheckBox
 		check : {
 			enable : true,
 			chkboxType : {
@@ -181,6 +182,7 @@ function getSettting(isRadioType){
 				"N" : "ps"
 			}
 		},
+		//启动同步
 		async : {
 			enable : true,
 		},
@@ -189,10 +191,11 @@ function getSettting(isRadioType){
 				enable : true,
 				idKey : "id",
 				pIdKey : "pId",
-				rootPId : 0
+				rootPId : 0 //跟id，也就是root
 			}
 		},
 		callback : {
+			//定义了oncheck事件，调用zTreeOnCheck方法
 			onCheck : zTreeOnCheck
 		}
 	};
