@@ -3,21 +3,21 @@
   
   <head>
     <meta charset="UTF-8">
-    <title>更新用户信息</title>
+    <title>修改用户信息</title>
     <header th:replace="header::html"></header>
   </head>
   
   <body>
     <div class="x-body">
         <form class="layui-form">
-
             <input type="hidden" id="userId" name="id" th:value="${sysUser.id}">
+
           <div class="layui-form-item">
               <label for="L_username" class="layui-form-label">
                   <span class="x-red">*</span>用户名
               </label>
               <div class="layui-input-inline">
-                  <input type="text" id="L_username" th:value="${sysUser.username}" name="username" lay-verify="required" autocomplete="off" class="layui-input">
+                  <input type="text" id="L_username" th:value="${sysUser.username}" name="username" required="" lay-verify="username" autocomplete="off" class="layui-input">
               </div>
               <div class="layui-form-mid layui-word-aux">
                   <span class="x-red">*</span>将会成为您唯一的登入名
@@ -53,7 +53,7 @@
             <div class="layui-form-item">
                 <label for="L_email" class="layui-form-label">生日</label>
                 <div class="layui-input-inline">
-                    <input type="text" id="L_birthday"  th:value="${#dates.format(sysUser.birthday,'yyyy-MM-dd')}" name='birthday' placeholder="yyyy-MM-dd" class="layui-input ">
+                    <input type="text" id="L_birthday"  th:value="${#dates.format(sysUser.birthday, 'yyyy-MM-dd')}"  name='birthday' lay-verify="date" placeholder="yyyy-MM-dd" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -72,19 +72,18 @@
           <div class="layui-form-item">
               <label for="L_email" class="layui-form-label">
               </label>
-              <button  class="layui-btn" lay-filter="edit" lay-submit="">
-                  保存
+              <button  class="layui-btn" lay-filter="add" lay-submit="">
+                  更新
               </button>
           </div>
       </form>
     </div>
     <script>
-
       layui.use(['form','layer', 'laydate'], function(){
           $ = layui.jquery;
-        var form = layui.form
-        ,layer = layui.layer
-        ,laydate = layui.laydate;
+          var form = layui.form
+          ,layer = layui.layer
+          ,laydate = layui.laydate;
           getAllRole(function(){
               layui.form.render('radio')
           });
@@ -93,7 +92,7 @@
               elem: '#L_birthday'
               ,format: 'yyyy-MM-dd' //可任意组合
           });
-      
+
         //自定义验证规则
         form.verify({
           nikename: function(value){
@@ -102,16 +101,20 @@
             }
           }
           ,telephone: [/(.+){6,12}$/, '电话号码必须6到12位']
+          ,email: function(value){
+              if($('#email').val()!=$('#email').val()){
+                  return '邮箱不正确';
+              }
+          }
         });
 
-      //监听提交
-        form.on('submit(edit)', function(data){
+        //监听提交
+        form.on('submit(add)', function(data){
             var rolelRadio = $("[name=roleId]:checked");
             if(rolelRadio == undefined || rolelRadio.length <= 0){
                 layer.alert("请给该用户设置角色");
                 return false;
             }
-            data.field.roleId = rolelRadio.val();
             $.ajax({
                 url:"/user/edit",
                 type:"POST",
@@ -128,14 +131,15 @@
                             xadmin.father_reload();
                         });
                     }
+
                 }
             });
           return false;
         });
-
-
       });
+
       function getAllRole(callback){
+
           $.ajax({
               url:"/role/all",
               type:"GET",
@@ -148,7 +152,6 @@
                               '<div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>'+result.datas[i].name+'</div></div>';
                       }
                       $(".show-role-container").html(html);
-
                       getCurrentUserRole(callback);
                   }
               }
@@ -161,29 +164,28 @@
               url:"/roleuser/getRoleUserByUserId",
               type:"POST",
               data:{
-                "userId" : userId
+                "userId":userId
               },
               dataType:'json',
               success:function(result){
                   if(result.code == 200){
                       if(result.data){
-                          $("[name=roleId]").each(function () {
+                          $("[name=roleId]").each(function(){
                               if($(this).val() == result.data.roleId){
                                   $(this).attr("checked","checked");
                                   return false;
                               }
-                          })
+                          });
                       }
-                      if (callback){
+                      if(callback){
                           callback();
                       }
+
+                      //callback&&callback()
                   }
               }
           });
       }
-
-
-
   </script>
   </body>
 </html>
